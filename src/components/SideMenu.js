@@ -84,13 +84,13 @@ export default function SideMenu() {
   const [menu, setMenu] = useState([]);
   const navigate = useNavigate();
 
-  const [defaultOpenKey, setDefaultOpenKey] = useState(["/home"])
-  const [defaultSelectedKeys, setDefaultSelectedKeys] = useState(["/home"])
-
   const onClick = (e) => {
     // console.log("click ", e);
     navigate(e.key);
   };
+
+  const defaultSelectedKeys = localStorage.getItem("defaultSelectedKeys")
+  const defaultOpenKey = localStorage.getItem("defaultOpenKey")
 
   useEffect(() => {
     axios.get("http://localhost:3000/rights?_embed=children").then((res) => {
@@ -98,9 +98,6 @@ export default function SideMenu() {
       setMenu(res.data);
     });
   }, []);
-
-  console.log(defaultOpenKey)
-  console.log(defaultSelectedKeys)
 
   return (
     <Sider trigger={null} collapsible collapsed={collapsed}>
@@ -111,13 +108,13 @@ export default function SideMenu() {
             onClick={onClick}
             theme="dark"
             mode="inline"
-            selectedKeys={defaultSelectedKeys}
-            defaultOpenKeys={defaultOpenKey}
+            defaultSelectedKeys={[defaultSelectedKeys]}
+            defaultOpenKeys={[defaultOpenKey]}
             onSelect={(item) => {
-              const selected = [...item.selectedKeys]
-              setDefaultSelectedKeys(selected)
-              const selected2 = ["/" + item.key.split('/')[1]]
-              setDefaultOpenKey(selected2)
+              localStorage.setItem("defaultSelectedKeys", item.key)
+            }}
+            onOpenChange={(item) => {
+              localStorage.setItem("defaultOpenKey", item[item.length - 1])
             }}
             items={renderMenu(menu)}
           />
