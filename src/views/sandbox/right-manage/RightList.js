@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Tag, Space, Button, Modal } from "antd";
+import { Table, Tag, Space, Switch, Button, Modal, Popover } from "antd";
 import {
   EditOutlined,
   DeleteOutlined,
@@ -18,7 +18,9 @@ export default function RightList() {
       icon: <ExclamationCircleFilled />,
       content: "Some descriptions",
       onOk() {
+        // 假删除
         setData(data.filter((data) => data.id !== item.id));
+        // axios.delete("http://localhost:3000/rights/${item.id}")
       },
       onCancel() {
         console.log("Cancel");
@@ -45,7 +47,7 @@ export default function RightList() {
       dataIndex: "key",
       key: "key",
       render: (key, title) => {
-        console.log(title);
+        // console.log(title);
         let color = key.length > 5 ? "geekblue" : "green";
         return <Tag color={color}>{key}</Tag>;
       },
@@ -56,11 +58,39 @@ export default function RightList() {
       dataIndex: "action",
       render: (_, record) => (
         <Space size="small">
-          <Button
-            type="primary"
-            shape="circle"
-            icon={<EditOutlined />}
-          ></Button>
+          <Popover
+            content={
+              <div>
+                <Switch
+                  checked={record.pagepermisson === 1}
+                  onChange={(flag, event) => {
+                    record.pagepermisson = flag?1:0;
+                    setData([...data]);
+                    if (record.grade === 1) {
+                      axios.patch(`http://localhost:3000/rights/${record.id}`, {
+                        pagepermisson: record.pagepermisson
+                      })
+                    } else { 
+                      axios.patch(`http://localhost:3000/children/${record.id}`, {
+                        pagepermisson: record.pagepermisson
+                      })
+                    }
+                  }}
+                  disabled={record.pagepermisson === undefined}
+                ></Switch>
+              </div>
+            }
+            title="页面配置项"
+            trigger={record.pagepermisson === undefined ? "" : "click"}
+          >
+            <Button
+              disabled={record.pagepermisson === undefined}
+              type="primary"
+              shape="circle"
+              icon={<EditOutlined />}
+            ></Button>
+          </Popover>
+
           <Button
             type="primary"
             shape="circle"
@@ -87,13 +117,11 @@ export default function RightList() {
   }, []);
 
   return (
-    <div>
       <Table
         bordered
         columns={columns}
         dataSource={data}
         pagination={{ defaultPageSize: 5, showSizeChanger: true }}
       />
-    </div>
   );
 }
