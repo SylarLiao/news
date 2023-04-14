@@ -23,7 +23,7 @@ export default function RightList() {
         // axios.delete("http://localhost:3000/rights/${item.id}")
       },
       onCancel() {
-        console.log("Cancel");
+        // console.log("Cancel");
       },
     });
   };

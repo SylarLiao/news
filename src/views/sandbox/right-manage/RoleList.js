@@ -67,7 +67,7 @@ export default function RoleList() {
         // axios.delete("http://localhost:3000/roles/${record.id}")
       },
       onCancel() {
-        console.log("Cancel");
+        // console.log("Cancel");
       },
     });
   };
@@ -95,7 +95,6 @@ export default function RoleList() {
         return item;
       }
     });
-    console.log(newData)
 
     axios
       .patch(`http://localhost:3000/rights/${currentId}`, {
