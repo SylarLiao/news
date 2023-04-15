@@ -38,6 +38,22 @@ export default function UserList() {
       render: (region) => {
         return region === "" ? "全球" : region;
       },
+      filters: [
+        {
+          text: "全球",
+          value: "全球"
+        },
+        ...regionList.map((item) => ({
+          text: item.title,
+          value: item.value,
+        }))
+      ],
+      onFilter: (value, record) => { 
+        if (value === "全球") { 
+          return record.region === '';
+        }
+        return record.region === value;
+      },
     },
     {
       title: "角色名称",
@@ -186,17 +202,21 @@ export default function UserList() {
           })
           .then((res) => {
             if (res.status === 200) {
-              setData(data.map((item) => {
-                if (item.id === current.id) {
-                  return {
-                    ...item,
-                    ...value,
-                    role: roleList.filter((data) => data.id === item.roleId)[0],
-                  };
-                } else {
-                  return item;
-                }
-              }));
+              setData(
+                data.map((item) => {
+                  if (item.id === current.id) {
+                    return {
+                      ...item,
+                      ...value,
+                      role: roleList.filter(
+                        (data) => data.id === item.roleId
+                      )[0],
+                    };
+                  } else {
+                    return item;
+                  }
+                })
+              );
               setIsUpdateDisabled(!isUpdateDisabled);
             }
           });
