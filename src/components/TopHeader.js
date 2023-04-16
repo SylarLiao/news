@@ -19,6 +19,7 @@ export default function TopHeader() {
   } = theme.useToken();
 
   const navigate = useNavigate();
+  const {role: {roleName}, username} = JSON.parse(localStorage.getItem("token"));
 
   const items = [
     {
@@ -29,7 +30,7 @@ export default function TopHeader() {
           rel="noopener noreferrer"
           href="https://www.antgroup.com"
         >
-          超级管理员
+          { roleName }
         </a>
       ),
     },
@@ -57,7 +58,7 @@ export default function TopHeader() {
         onClick: () => setCollapsed(!collapsed),
       })}
       <div style={{ float: "right" }}>
-        <span>欢迎回来</span>
+        <span>欢迎{ username }回来 </span>
         <Dropdown
           menu={{
             items,

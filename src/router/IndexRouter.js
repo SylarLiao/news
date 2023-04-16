@@ -4,7 +4,6 @@ import Login from "../views/login/Login";
 import NewsSandBox from "../views/sandbox/NewsSandBox";
 
 export default function IndexRouter() {
-  localStorage.setItem("token", "xxxx")
   let isLogin = !(localStorage.getItem("token") === null)
   // console.log(isLogin)
   return (

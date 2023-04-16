@@ -1,12 +1,31 @@
 import React from "react";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import "./Login.css";
-import { Button, Checkbox, Form, Input } from "antd";
+import { Button, Checkbox, Form, Input, message } from "antd";
 import ParticlesBg from "particles-bg";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+  const navigate = useNavigate();
+
   const onFinish = (values) => {
-    console.log(values);
+    // console.log(values);
+    axios
+      .get(
+        `http://localhost:3000/users?username=${values.username}&password=${values.password}&roleState=true&_expand=role`
+      )
+      .then((res) => {
+        // console.log(res.data);
+        if (res.status === 200) {
+          if (res.data.length === 0) {
+            message.error("用户名或密码错误")
+          } else {
+            localStorage.setItem("token", JSON.stringify(res.data[0]));
+            navigate("/");
+          }
+        }
+      });
   };
 
   return (
@@ -76,9 +95,10 @@ export default function Login() {
           </Form.Item>
         </Form>
       </div>
-      <ParticlesBg type="random"
-          bg={{ position: "relative", width: "100%", height: "100%"}}
-        />
+      <ParticlesBg
+        type="random"
+        bg={{ position: "relative", width: "100%", height: "100%" }}
+      />
     </div>
   );
 }
