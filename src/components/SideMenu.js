@@ -89,8 +89,8 @@ export default function SideMenu() {
     navigate(e.key);
   };
 
-  const defaultSelectedKeys = localStorage.getItem("defaultSelectedKeys")
-  const defaultOpenKey = localStorage.getItem("defaultOpenKey")
+  const defaultSelectedKeys = localStorage.getItem("defaultSelectedKeys");
+  const defaultOpenKey = localStorage.getItem("defaultOpenKey");
 
   useEffect(() => {
     axios.get("http://localhost:3000/rights?_embed=children").then((res) => {
@@ -111,10 +111,10 @@ export default function SideMenu() {
             defaultSelectedKeys={[defaultSelectedKeys]}
             defaultOpenKeys={[defaultOpenKey]}
             onSelect={(item) => {
-              localStorage.setItem("defaultSelectedKeys", item.key)
+              localStorage.setItem("defaultSelectedKeys", item.key);
             }}
             onOpenChange={(item) => {
-              localStorage.setItem("defaultOpenKey", item[item.length - 1])
+              localStorage.setItem("defaultOpenKey", item[item.length - 1]);
             }}
             items={renderMenu(menu)}
           />

@@ -1,0 +1,37 @@
+.background-style {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: rgb(34, 46, 57);
+}
+
+.login-form {
+    position: absolute;
+    background-color: rgba(232, 240, 238, 0.7);
+    width: 500px;
+    height: 300px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    z-index: 999;
+}
+
+.login-title {
+    text-align: center;
+    color: rgb(44, 103, 175);
+    font-family: "Times New Roman", Times, serif;
+    font-size: large;
+}
+
+.login-form-forgot {
+    float: right;
+}
+
+.ant-col-rtl .login-form-forgot {
+    float: left;
+}
+
+.login-form-button {
+    width: 100%;
+}
