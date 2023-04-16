@@ -9,7 +9,7 @@ import {
 import UserForm from "../../../components/user-manage/UserForm";
 
 const { confirm } = Modal;
-
+  
 export default function UserList() {
   const [data, setData] = useState([]);
   const [isAddVisible, setIsAddVisible] = useState(false);
