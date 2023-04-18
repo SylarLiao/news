@@ -32,7 +32,6 @@ export default function RightList() {
     {
       title: "ID",
       dataIndex: "id",
-      key: "id",
       render: (id) => {
         return <b>{id}</b>;
       },
@@ -40,12 +39,10 @@ export default function RightList() {
     {
       title: "权限名称",
       dataIndex: "title",
-      key: "title",
     },
     {
       title: "权限路径",
       dataIndex: "key",
-      key: "key",
       render: (key, title) => {
         // console.log(title);
         let color = key.length > 5 ? "geekblue" : "green";
@@ -54,7 +51,6 @@ export default function RightList() {
     },
     {
       title: "操作",
-      key: "action",
       dataIndex: "action",
       render: (_, record) => (
         <Space size="small">
@@ -64,16 +60,19 @@ export default function RightList() {
                 <Switch
                   checked={record.pagepermisson === 1}
                   onChange={(flag, event) => {
-                    record.pagepermisson = flag?1:0;
+                    record.pagepermisson = flag ? 1 : 0;
                     setData([...data]);
                     if (record.grade === 1) {
                       axios.patch(`http://localhost:3000/rights/${record.id}`, {
-                        pagepermisson: record.pagepermisson
-                      })
-                    } else { 
-                      axios.patch(`http://localhost:3000/children/${record.id}`, {
-                        pagepermisson: record.pagepermisson
-                      })
+                        pagepermisson: record.pagepermisson,
+                      });
+                    } else {
+                      axios.patch(
+                        `http://localhost:3000/children/${record.id}`,
+                        {
+                          pagepermisson: record.pagepermisson,
+                        }
+                      );
                     }
                   }}
                   disabled={record.pagepermisson === undefined}
@@ -117,11 +116,12 @@ export default function RightList() {
   }, []);
 
   return (
-      <Table
-        bordered
-        columns={columns}
-        dataSource={data}
-        pagination={{ defaultPageSize: 5, showSizeChanger: true }}
-      />
+    <Table
+      bordered
+      rowKey={(record) => record.id}
+      columns={columns}
+      dataSource={data}
+      pagination={{ defaultPageSize: 5, showSizeChanger: true }}
+    />
   );
 }

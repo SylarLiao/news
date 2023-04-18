@@ -16,11 +16,11 @@ export default function Login() {
         `http://localhost:3000/users?username=${values.username}&password=${values.password}&roleState=true&_expand=role`
       )
       .then((res) => {
-        // console.log(res.data);
         if (res.status === 200) {
           if (res.data.length === 0) {
-            message.error("用户名或密码错误")
+            message.error("用户名或密码错误");
           } else {
+            console.log("login success!", res.data);
             localStorage.setItem("token", JSON.stringify(res.data[0]));
             navigate("/");
           }

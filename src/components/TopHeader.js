@@ -58,7 +58,7 @@ export default function TopHeader() {
         onClick: () => setCollapsed(!collapsed),
       })}
       <div style={{ float: "right" }}>
-        <span>欢迎{ username }回来 </span>
+        <span>欢迎<span style={{color: "blue"}}>{ username }</span>回来 </span>
         <Dropdown
           menu={{
             items,

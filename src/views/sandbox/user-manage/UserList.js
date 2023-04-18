@@ -34,7 +34,6 @@ export default function UserList() {
     {
       title: "区域",
       dataIndex: "region",
-      key: "region",
       render: (region) => {
         return region === "" ? "全球" : region;
       },
@@ -58,7 +57,6 @@ export default function UserList() {
     {
       title: "角色名称",
       dataIndex: "role",
-      key: "role",
       render: (role) => {
         return role.roleName;
       },
@@ -71,7 +69,6 @@ export default function UserList() {
     {
       title: "用户状态",
       dataIndex: "roleState",
-      key: "roleState",
       render: (roleState, item) => {
         // console.log(roleState, item)
         return (
@@ -85,7 +82,6 @@ export default function UserList() {
     },
     {
       title: "操作",
-      key: "action",
       dataIndex: "action",
       render: (_, item) => (
         <Space size="small">
@@ -241,6 +237,7 @@ export default function UserList() {
         bordered
         columns={columns}
         dataSource={data}
+        rowKey={(record) => record.id}
         pagination={{ defaultPageSize: 5, showSizeChanger: true }}
       />
 

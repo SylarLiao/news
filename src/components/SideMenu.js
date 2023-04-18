@@ -1,6 +1,6 @@
 import { Layout, Menu } from "antd";
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   RightOutlined,
   DashOutlined,
@@ -59,21 +59,27 @@ const icons = {
   "/publish-manage/sunset": <SlidersTwoTone />,
 };
 
-const checkPagePermission = (item) => {
-  return item.pagepermisson === 1;
+const {
+  role: { rights },
+} = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")) : { role: {rights: null} };
+
+const checkPermission = (item) => {
+  return item.pagepermisson === 1 && rights.includes(item.key);
 };
 
 const renderMenu = (menuList) => {
   return menuList.map((item) => {
-    if (checkPagePermission(item)) {
-      return item.children?.length > 0
-        ? getItem(
-            item.title,
-            item.key,
-            renderMenu(item.children),
-            icons[item.key]
-          )
-        : getItem(item.title, item.key, null, icons[item.key]);
+    if (checkPermission(item)) {
+      if (item?.children?.length > 0) {
+        return getItem(
+          item.title,
+          item.key,
+          renderMenu(item.children),
+          icons[item.key]
+        );
+      } else {
+        return getItem(item.title, item.key, null, icons[item.key]);
+      }
     }
     return null;
   });
@@ -83,9 +89,11 @@ export default function SideMenu() {
   const [collapsed] = useState(false);
   const [menu, setMenu] = useState([]);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const onClick = (e) => {
     // console.log("click ", e);
+    console.log(location);
     navigate(e.key);
   };
 
@@ -94,7 +102,7 @@ export default function SideMenu() {
 
   useEffect(() => {
     axios.get("http://localhost:3000/rights?_embed=children").then((res) => {
-      // console.log(res.data)
+      console.log(res.data);
       setMenu(res.data);
     });
   }, []);

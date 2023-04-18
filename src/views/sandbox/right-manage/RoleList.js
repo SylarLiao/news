@@ -20,16 +20,13 @@ export default function RoleList() {
     {
       title: "ID",
       dataIndex: "id",
-      key: "id",
     },
     {
       title: "roleName",
       dataIndex: "roleName",
-      key: "roleName",
     },
     {
       title: "操作",
-      key: "action",
       dataIndex: "action",
       render: (_, record) => (
         <Space size="small">
@@ -121,6 +118,7 @@ export default function RoleList() {
     <div>
       <Table
         bordered
+        rowKey={(record) => record.id}
         columns={columns}
         dataSource={data}
         pagination={{ defaultPageSize: 5, showSizeChanger: true }}
