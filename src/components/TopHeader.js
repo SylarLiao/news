@@ -39,8 +39,8 @@ export default function TopHeader() {
       danger: true,
       label: "退出",
       onClick: () => {
-        navigate("/login");
         localStorage.removeItem("token");
+        navigate("/login");
       },
     },
   ];

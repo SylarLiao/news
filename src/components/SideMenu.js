@@ -1,6 +1,6 @@
 import { Layout, Menu } from "antd";
 import React, { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   RightOutlined,
   DashOutlined,
@@ -59,17 +59,28 @@ const icons = {
   "/publish-manage/sunset": <SlidersTwoTone />,
 };
 
-const {
-  role: { rights },
-} = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")) : { role: {rights: null} };
+export default function SideMenu() {
+  const [collapsed] = useState(false);
+  const [menu, setMenu] = useState([]);
+  const navigate = useNavigate();
 
-const checkPermission = (item) => {
-  return item.pagepermisson === 1 && rights.includes(item.key);
-};
+  let { role } = localStorage.getItem("token")
+    ? JSON.parse(localStorage.getItem("token"))
+    : { rights: [] };
 
-const renderMenu = (menuList) => {
-  return menuList.map((item) => {
-    if (checkPermission(item)) {
+  const checkPermission = (item) => {
+    return item.pagepermisson && role.rights.includes(item.key);
+  };
+
+  const renderMenu = (menuList) => {
+    let result = menuList.filter((item) => {
+      if (item?.children?.length > 0) {
+        item.children = item.children.filter((item) => checkPermission(item));
+      }
+      return checkPermission(item);
+    });
+
+    return result.map((item) => {
       if (item?.children?.length > 0) {
         return getItem(
           item.title,
@@ -77,24 +88,13 @@ const renderMenu = (menuList) => {
           renderMenu(item.children),
           icons[item.key]
         );
-      } else {
-        return getItem(item.title, item.key, null, icons[item.key]);
       }
-    }
-    return null;
-  });
-};
-
-export default function SideMenu() {
-  const [collapsed] = useState(false);
-  const [menu, setMenu] = useState([]);
-  const navigate = useNavigate();
-  const location = useLocation();
+      return getItem(item.title, item.key, null, icons[item.key]);
+    });
+  };
 
   const onClick = (e) => {
-    // console.log("click ", e);
-    console.log(location);
-    navigate(e.key);
+    navigate(e.key, { state: { key: e.keyPath } });
   };
 
   const defaultSelectedKeys = localStorage.getItem("defaultSelectedKeys");
@@ -102,7 +102,6 @@ export default function SideMenu() {
 
   useEffect(() => {
     axios.get("http://localhost:3000/rights?_embed=children").then((res) => {
-      console.log(res.data);
       setMenu(res.data);
     });
   }, []);

@@ -4,9 +4,7 @@ import Login from "../views/login/Login";
 import NewsSandBox from "../views/sandbox/NewsSandBox";
 
 export default function IndexRouter() {
-  console.log(localStorage.getItem("token"))
   let isLogin = localStorage.getItem("token") !== null;
-  console.log(isLogin);
   return (
     <BrowserRouter>
       <Routes>

@@ -20,9 +20,8 @@ export default function Login() {
           if (res.data.length === 0) {
             message.error("用户名或密码错误");
           } else {
-            console.log("login success!", res.data);
             localStorage.setItem("token", JSON.stringify(res.data[0]));
-            navigate("/");
+            navigate("/", { replace: true });
           }
         }
       });
