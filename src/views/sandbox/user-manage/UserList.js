@@ -9,7 +9,7 @@ import {
 import UserForm from "../../../components/user-manage/UserForm";
 
 const { confirm } = Modal;
-  
+
 export default function UserList() {
   const [data, setData] = useState([]);
   const [isAddVisible, setIsAddVisible] = useState(false);
@@ -40,16 +40,16 @@ export default function UserList() {
       filters: [
         {
           text: "全球",
-          value: "全球"
+          value: "全球",
         },
         ...regionList.map((item) => ({
           text: item.title,
           value: item.value,
-        }))
+        })),
       ],
-      onFilter: (value, record) => { 
-        if (value === "全球") { 
-          return record.region === '';
+      onFilter: (value, record) => {
+        if (value === "全球") {
+          return record.region === "";
         }
         return record.region === value;
       },
@@ -137,11 +137,33 @@ export default function UserList() {
     });
   };
 
+  const { roleId, region, username } = JSON.parse(
+    localStorage.getItem("token")
+  );
+
   useEffect(() => {
     axios.get("http://localhost:3000/users?_expand=role").then((res) => {
-      setData(res.data);
+      const roleObj = {
+        1: "superadmin",
+        2: "admin",
+        3: "editor",
+      };
+
+      let users = res.data;
+
+      setData(
+        roleObj[roleId] === "superadmin"
+          ? users
+          : [
+              ...users.filter((item) => item.username === username),
+              ...users.filter(
+                (item) =>
+                  item.region === region && roleObj[item.roleId] === "editor"
+              )
+            ]
+      );
     });
-  }, []);
+  }, [roleId, username, region]);
 
   useEffect(() => {
     axios.get("http://localhost:3000/regions").then((res) => {
@@ -256,6 +278,7 @@ export default function UserList() {
           roleList={roleList}
           regionList={regionList}
           isUpdateDisabled={isUpdateDisabled}
+          isUpdate={false}
         />
       </Modal>
 
@@ -275,6 +298,7 @@ export default function UserList() {
           isUpdateDisabled={isUpdateDisabled}
           roleList={roleList}
           regionList={regionList}
+          isUpdate = {true}
         />
       </Modal>
     </div>
