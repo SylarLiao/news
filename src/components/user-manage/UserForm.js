@@ -5,23 +5,67 @@ import { EyeTwoTone, EyeInvisibleOutlined } from "@ant-design/icons";
 const UserForm = forwardRef((props, ref) => {
   const [isDisabled, setIsDisabled] = useState(false);
   const [roleList, setRoleList] = useState([]);
-  const [regionList, setRegionList] = useState([])
+  const [regionList, setRegionList] = useState([]);
 
   useEffect(() => {
     setIsDisabled(props.isUpdateDisabled);
   }, [props.isUpdateDisabled]);
 
+  const { roleId, region } = JSON.parse(localStorage.getItem("token"));
+  const roleObj = {
+    1: "superadmin",
+    2: "admin",
+    3: "editor",
+  };
+
   useEffect(() => {
-    setRoleList(props.roleList.map(item => { 
-      return {value: item.id, label: item.roleName}
-    }));
+    const checkRoleDisabled = (item) => {
+      if (props.isUpdate) {
+        if (roleObj[roleId] === "superadmin") {
+          return false;
+        } else {
+          return true;
+        }
+      } else {
+        if (roleObj[roleId] === "superadmin") {
+          return false;
+        } else {
+          return item.id !== 3;
+        }
+      }
+    };
+
+    setRoleList(
+      props.roleList.map((item) => {
+        let isDisabled = checkRoleDisabled(item);
+        return { value: item.id, label: item.roleName, disabled: isDisabled };
+      })
+    );
   }, [props.roleList]);
 
   useEffect(() => {
-    setRegionList(props.regionList.map(item => { 
-      return {value: item.value, label: item.value}
-    }));
-  }, [props.regionList]);
+    const checkRegionDisabled = (item) => {
+      if (props.isUpdate) {
+        if (roleObj[roleId] === "superadmin") {
+          return false;
+        } else {
+          return true;
+        }
+      } else {
+        if (roleObj[roleId] === "superadmin") {
+          return false;
+        } else {
+          return item.value !== region;
+        }
+      }
+    };
+    setRegionList(
+      props.regionList.map((item) => {
+        let isDisabled = checkRegionDisabled(item);
+        return { value: item.value, label: item.value, disabled: isDisabled };
+      })
+    );
+  }, [props.regionList, props.isUpdate, region, roleId, roleObj]);
 
   return (
     <Form ref={ref} layout="vertical" name="form_in_modal">
