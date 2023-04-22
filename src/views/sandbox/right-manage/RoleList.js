@@ -61,7 +61,7 @@ export default function RoleList() {
       onOk() {
         // 假删除
         setData(data.filter((data) => data.id !== record.id));
-        // axios.delete("http://localhost:3000/roles/${record.id}")
+        // axios.delete("/roles/${record.id}")
       },
       onCancel() {
         // console.log("Cancel");
@@ -70,13 +70,13 @@ export default function RoleList() {
   };
 
   useEffect(() => {
-    axios.get("http://localhost:3000/roles").then((res) => {
+    axios.get("/roles").then((res) => {
       setData(res.data);
     });
   }, []);
 
   useEffect(() => {
-    axios.get("http://localhost:3000/rights?_embed=children").then((res) => {
+    axios.get("/rights?_embed=children").then((res) => {
       setRights(res.data);
     });
   }, []);
@@ -94,7 +94,7 @@ export default function RoleList() {
     });
 
     axios
-      .patch(`http://localhost:3000/rights/${currentId}`, {
+      .patch(`/rights/${currentId}`, {
         rights: currentRights,
       })
       .then((res) => {

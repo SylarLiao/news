@@ -25,7 +25,7 @@ export default function UserList() {
     // console.log(checked, item)
     item.roleState = checked;
     setData([...data, item]);
-    axios.patch(`http://localhost:3000/users/${item.id}`, {
+    axios.patch(`/users/${item.id}`, {
       roleState: item.roleState,
     });
   };
@@ -129,7 +129,7 @@ export default function UserList() {
       content: "删除用户",
       onOk() {
         setData(data.filter((data) => data.id !== item.id));
-        axios.delete(`http://localhost:3000/users/${item.id}`);
+        axios.delete(`/users/${item.id}`);
       },
       onCancel() {
         // console.log("Cancel");
@@ -142,7 +142,7 @@ export default function UserList() {
   );
 
   useEffect(() => {
-    axios.get("http://localhost:3000/users?_expand=role").then((res) => {
+    axios.get("/users?_expand=role").then((res) => {
       const roleObj = {
         1: "superadmin",
         2: "admin",
@@ -166,13 +166,13 @@ export default function UserList() {
   }, [roleId, username, region]);
 
   useEffect(() => {
-    axios.get("http://localhost:3000/regions").then((res) => {
+    axios.get("/regions").then((res) => {
       setRegionList(res.data);
     });
   }, []);
 
   useEffect(() => {
-    axios.get("http://localhost:3000/roles").then((res) => {
+    axios.get("/roles").then((res) => {
       setRoleList(res.data);
     });
   }, []);
@@ -186,7 +186,7 @@ export default function UserList() {
 
         // add data
         axios
-          .post(`http://localhost:3000/users`, {
+          .post(`/users`, {
             ...value,
             roleState: true,
             default: false,
@@ -215,7 +215,7 @@ export default function UserList() {
 
         // update data
         axios
-          .patch(`http://localhost:3000/users/${current.id}`, {
+          .patch(`/users/${current.id}`, {
             ...value,
           })
           .then((res) => {

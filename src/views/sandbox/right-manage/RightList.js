@@ -20,7 +20,7 @@ export default function RightList() {
       onOk() {
         // 假删除
         setData(data.filter((data) => data.id !== item.id));
-        // axios.delete("http://localhost:3000/rights/${item.id}")
+        // axios.delete("/rights/${item.id}")
       },
       onCancel() {
         // console.log("Cancel");
@@ -63,12 +63,12 @@ export default function RightList() {
                     record.pagepermisson = flag ? 1 : 0;
                     setData([...data]);
                     if (record.grade === 1) {
-                      axios.patch(`http://localhost:3000/rights/${record.id}`, {
+                      axios.patch(`/rights/${record.id}`, {
                         pagepermisson: record.pagepermisson,
                       });
                     } else {
                       axios.patch(
-                        `http://localhost:3000/children/${record.id}`,
+                        `/children/${record.id}`,
                         {
                           pagepermisson: record.pagepermisson,
                         }
@@ -103,7 +103,7 @@ export default function RightList() {
   ];
 
   useEffect(() => {
-    axios.get("http://localhost:3000/rights?_embed=children").then((res) => {
+    axios.get("/rights?_embed=children").then((res) => {
       let data = res.data;
       data.map((item) => {
         if (item.children?.length === 0) {

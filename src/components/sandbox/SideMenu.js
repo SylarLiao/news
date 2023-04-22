@@ -101,7 +101,7 @@ export default function SideMenu() {
   const defaultOpenKey = localStorage.getItem("defaultOpenKey");
 
   useEffect(() => {
-    axios.get("http://localhost:3000/rights?_embed=children").then((res) => {
+    axios.get("/rights?_embed=children").then((res) => {
       setMenu(res.data);
     });
   }, []);

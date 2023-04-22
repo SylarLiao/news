@@ -13,7 +13,7 @@ export default function Login() {
     // console.log(values);
     axios
       .get(
-        `http://localhost:3000/users?username=${values.username}&password=${values.password}&roleState=true&_expand=role`
+        `/users?username=${values.username}&password=${values.password}&roleState=true&_expand=role`
       )
       .then((res) => {
         if (res.status === 200) {
@@ -74,7 +74,7 @@ export default function Login() {
               <Checkbox>Remember me</Checkbox>
             </Form.Item>
 
-            <a className="login-form-forgot" href="http://localhost:3000/">
+            <a className="login-form-forgot" href="/">
               Forgot password
             </a>
           </Form.Item>
@@ -89,7 +89,7 @@ export default function Login() {
             </Button>
             <div>
               没有账号?{" "}
-              <a href="http://localhost:3000/register">register now!</a>
+              <a href="/register">register now!</a>
             </div>
           </Form.Item>
         </Form>
