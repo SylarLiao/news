@@ -41,7 +41,7 @@ const UserForm = forwardRef((props, ref) => {
         return { value: item.id, label: item.roleName, disabled: isDisabled };
       })
     );
-  }, [props.roleList]);
+  }, [props.roleList, roleId, roleObj, props.isUpdate]);
 
   useEffect(() => {
     const checkRegionDisabled = (item) => {
